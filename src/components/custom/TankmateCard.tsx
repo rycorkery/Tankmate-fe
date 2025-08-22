@@ -30,11 +30,7 @@ TankmateCard.displayName = 'TankmateCard'
 
 const TankmateCardHeader = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn('flex flex-col space-y-1.5 p-6', className)}
-      {...props}
-    />
+    <div ref={ref} className={cn('flex flex-col space-y-1.5 p-6', className)} {...props} />
   )
 )
 
@@ -52,15 +48,12 @@ const TankmateCardTitle = forwardRef<HTMLHeadingElement, React.HTMLAttributes<HT
 
 TankmateCardTitle.displayName = 'TankmateCardTitle'
 
-const TankmateCardDescription = forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
-  ({ className, ...props }, ref) => (
-    <p
-      ref={ref}
-      className={cn('text-sm text-muted-foreground', className)}
-      {...props}
-    />
-  )
-)
+const TankmateCardDescription = forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => (
+  <p ref={ref} className={cn('text-sm text-muted-foreground', className)} {...props} />
+))
 
 TankmateCardDescription.displayName = 'TankmateCardDescription'
 
@@ -74,11 +67,7 @@ TankmateCardContent.displayName = 'TankmateCardContent'
 
 const TankmateCardFooter = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn('flex items-center p-6 pt-0', className)}
-      {...props}
-    />
+    <div ref={ref} className={cn('flex items-center p-6 pt-0', className)} {...props} />
   )
 )
 

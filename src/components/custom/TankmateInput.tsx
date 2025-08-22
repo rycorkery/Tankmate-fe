@@ -40,12 +40,8 @@ const TankmateInput = forwardRef<HTMLInputElement, TankmateInputProps>(
             {...props}
           />
         </div>
-        {error && (
-          <p className="text-sm text-destructive">{error}</p>
-        )}
-        {helperText && !error && (
-          <p className="text-sm text-muted-foreground">{helperText}</p>
-        )}
+        {error && <p className="text-sm text-destructive">{error}</p>}
+        {helperText && !error && <p className="text-sm text-muted-foreground">{helperText}</p>}
       </div>
     )
   }
