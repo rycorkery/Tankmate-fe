@@ -1,6 +1,7 @@
 import { defineConfig } from 'orval'
 
 // Fail fast if required environment variables are missing
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getRequiredEnvVar = (name: string): string => {
   const value = process.env[name]
   if (!value) {
@@ -47,7 +48,7 @@ export default defineConfig({
       },
     },
     input: {
-      target: `${getRequiredEnvVar('VITE_API_URL')}/openapi.json`,
+      target: 'https://api.tankmate.dev/api-docs',
     },
   },
 })

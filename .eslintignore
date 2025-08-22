@@ -1,0 +1,12 @@
+# Generated API files
+src/api/generated/
+
+# Build output
+dist/
+build/
+
+# Dependencies
+node_modules/
+
+# Environment files
+.env*

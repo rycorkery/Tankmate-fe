@@ -614,3 +614,11 @@ const buttonClass = `bg-brand-ocean text-white rounded-${designTokens.borderRadi
 ## Contact & Support
 
 For questions about this codebase or architecture decisions, refer to this documentation first. This guide should be updated whenever significant architectural changes are made.
+
+# Important Instruction Reminders
+
+## Design Guidelines
+- **NEVER use emojis** in the application interface, components, or any user-facing content. Use SVG icons or text instead for a more professional appearance.
+- **Single Theme**: Focus on one polished light theme rather than implementing dark mode functionality.
+- **Professional Appearance**: Maintain a clean, trustworthy, and modern aesthetic that reflects the brand values.
+- **Centralized Color System**: All brand colors are defined once in `tailwind.config.js` under the `brand` namespace. Components should always use `brand-*` classes (e.g., `text-brand-ocean`, `bg-brand-teal`) rather than hardcoded colors. This ensures consistency and makes global color changes possible.

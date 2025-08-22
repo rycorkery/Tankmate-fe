@@ -1,20 +1,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Layout } from '@/components/layout/Layout'
 import { Landing } from '@/pages/Landing'
-import { useStore } from '@/store/useStore'
-import { useEffect } from 'react'
 
 function App() {
-  const { theme } = useStore()
-
-  useEffect(() => {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
-  }, [theme])
-
   return (
     <BrowserRouter>
       <Routes>

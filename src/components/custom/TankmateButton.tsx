@@ -19,8 +19,17 @@ const TankmateButton = forwardRef<HTMLButtonElement, TankmateButtonProps>(
         variant={variant}
         size={size}
         className={cn(
-          'font-medium transition-all duration-200',
-          'hover:shadow-md active:scale-95',
+          'font-medium transition-all duration-150',
+          'hover:shadow-lg active:scale-95',
+          'focus-visible:ring-2 focus-visible:ring-brand-ocean focus-visible:ring-offset-2',
+          // Enhanced brand styling using design tokens
+          variant === 'default' && 'bg-brand-ocean hover:bg-brand-ocean-dark text-brand-pearl',
+          variant === 'secondary' &&
+            'border-brand-ocean text-brand-ocean hover:bg-brand-ocean hover:text-brand-pearl',
+          variant === 'outline' &&
+            'border-brand-ocean text-brand-ocean hover:bg-brand-ocean hover:text-brand-pearl',
+          variant === 'ghost' && 'text-brand-ocean hover:bg-brand-ocean/10',
+          variant === 'destructive' && 'bg-brand-coral hover:bg-brand-coral-dark text-brand-pearl',
           className
         )}
         disabled={disabled || loading}
@@ -52,7 +61,7 @@ const TankmateButton = forwardRef<HTMLButtonElement, TankmateButtonProps>(
           </span>
         ) : (
           <>
-            {icon && <span className="inline-flex">{icon}</span>}
+            {icon && <span className="inline-flex items-center">{icon}</span>}
             {children}
           </>
         )}
