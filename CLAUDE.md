@@ -29,6 +29,16 @@ Tankmate is a React-based single-page application (SPA) for aquarium management.
 
 ```
 src/
+├── api/
+│   ├── generated/       # Auto-generated API client and types (DO NOT EDIT)
+│   │   ├── model/       # Generated Zod schemas and TypeScript types
+│   │   └── tankmate.ts  # Generated React Query hooks and API functions
+│   ├── mutator/         # Custom Axios instance configuration
+│   ├── services/        # Service layer with validation and error handling
+│   │   ├── base.ts      # Base service class
+│   │   └── example.ts   # Example service implementation
+│   ├── validation/      # Validation utilities
+│   └── query-client.ts  # React Query client configuration
 ├── components/
 │   ├── custom/          # Custom wrapped components (TankmateButton, etc.)
 │   ├── layout/          # Layout components (Navigation, Footer, Layout)
@@ -67,6 +77,12 @@ src/
 - **Utility-First**: Tailwind CSS for rapid development
 - **Component Classes**: Custom components with consistent styling
 - **Theme Support**: Light/dark mode with CSS variables
+
+### 5. API Architecture
+- **Code Generation**: OpenAPI spec → TypeScript types + React Query hooks
+- **Runtime Validation**: Zod schemas for request/response validation
+- **Error Handling**: Centralized error handling with user-friendly messages
+- **Type Safety**: Full end-to-end type safety from API to UI
 
 ## Key Components
 
@@ -221,14 +237,205 @@ npm run type-check
 4. Update `.env.example`
 
 ### Implementing API Calls
-```tsx
-import { config } from '@/config/env'
 
-async function fetchData() {
-  const response = await fetch(`${config.api.fullUrl}/endpoint`)
-  return response.json()
+**IMPORTANT**: Always use the generated API client instead of manual fetch calls.
+
+```tsx
+import { useGetUser, useCreateUser } from '@/api/generated/tankmate'
+import { userService } from '@/api/services/example'
+
+// Using generated React Query hooks (recommended)
+function UserProfile({ userId }: { userId: string }) {
+  const { data: user, isLoading, error } = useGetUser(userId)
+  const createUserMutation = useCreateUser()
+
+  if (isLoading) return <div>Loading...</div>
+  if (error) return <div>Error: {error.message}</div>
+
+  return <div>{user?.name}</div>
+}
+
+// Using service layer for complex logic
+async function handleCreateUser(userData: unknown) {
+  try {
+    const user = await userService.createUser(userData)
+    console.log('User created:', user)
+  } catch (error) {
+    console.error('Failed to create user:', error)
+  }
 }
 ```
+
+## API Architecture & Code Generation
+
+### Overview
+Tankmate uses a sophisticated API architecture that automatically generates TypeScript client code from OpenAPI specifications, ensuring type safety and validation throughout the application.
+
+### Key Benefits
+- **Zero Manual API Code**: All API client code is auto-generated from OpenAPI spec
+- **End-to-End Type Safety**: TypeScript types flow from backend to frontend automatically
+- **Runtime Validation**: Zod schemas validate requests/responses at runtime
+- **Error Handling**: Centralized, consistent error handling across all API calls
+- **Developer Experience**: IntelliSense, auto-completion, and compile-time errors
+
+### Code Generation Workflow
+
+1. **Backend Exposes OpenAPI Spec**: Backend provides OpenAPI specification at `/openapi.json`
+2. **Generate Client Code**: Run `npm run api:generate` to create TypeScript client
+3. **Generated Assets**:
+   - TypeScript interfaces for all API models
+   - Zod schemas for runtime validation
+   - React Query hooks for each endpoint
+   - Axios-based API functions with error handling
+
+### Generated Code Structure
+
+```
+src/api/generated/
+├── model/
+│   ├── user.ts              # User model types and Zod schema
+│   ├── createUserRequest.ts # Request types and validation
+│   └── index.ts             # Barrel exports
+└── tankmate.ts              # React Query hooks and API functions
+```
+
+### Usage Patterns
+
+#### 1. React Query Hooks (Recommended)
+```tsx
+import { useGetUsers, useCreateUser } from '@/api/generated/tankmate'
+
+function UsersList() {
+  // Auto-generated hook with TypeScript types
+  const { data: users, isLoading, error } = useGetUsers()
+  const createUserMutation = useCreateUser({
+    onSuccess: () => {
+      // Refetch users list
+    }
+  })
+
+  // TypeScript knows the exact shape of users
+  return (
+    <div>
+      {users?.map(user => (
+        <div key={user.id}>{user.name}</div>
+      ))}
+    </div>
+  )
+}
+```
+
+#### 2. Service Layer Pattern
+```tsx
+import { BaseApiService } from '@/api/services/base'
+import { createUser, CreateUserRequest, User } from '@/api/generated/tankmate'
+import { createUserRequestSchema, userSchema } from '@/api/generated/model'
+
+class UserService extends BaseApiService {
+  async createUser(userData: unknown): Promise<User> {
+    // Validate request data against generated Zod schema
+    const validatedData = this.validateRequest(createUserRequestSchema, userData)
+    
+    // Call generated API function with error handling
+    return this.executeApiCall(
+      async () => {
+        const response = await createUser(validatedData)
+        // Validate response against generated schema
+        return this.validateResponse(userSchema, response)
+      },
+      'Create user'
+    )
+  }
+}
+```
+
+#### 3. Form Validation Integration
+```tsx
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { createUserRequestSchema } from '@/api/generated/model'
+
+function CreateUserForm() {
+  const form = useForm({
+    resolver: zodResolver(createUserRequestSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+    }
+  })
+
+  // TypeScript infers form data types from Zod schema
+  const onSubmit = (data: CreateUserRequest) => {
+    // Data is already validated by the form
+    createUserMutation.mutate(data)
+  }
+}
+```
+
+### Environment Setup
+
+Add required environment variables to `.env`:
+```env
+VITE_API_URL=http://localhost:3000
+```
+
+### Commands
+
+```bash
+# Generate API client from OpenAPI spec
+npm run api:generate
+
+# Watch OpenAPI spec for changes and auto-regenerate
+npm run api:watch
+
+# Start development with API watching
+npm run dev & npm run api:watch
+```
+
+### Error Handling
+
+The API layer provides comprehensive error handling:
+
+```tsx
+import { TankmateApiError } from '@/api/services/base'
+
+try {
+  const user = await userService.createUser(userData)
+} catch (error) {
+  if (error instanceof TankmateApiError) {
+    switch (error.code) {
+      case 'VALIDATION_ERROR':
+        // Handle validation errors
+        console.log('Validation failed:', error.details)
+        break
+      case 'UNAUTHORIZED':
+        // Redirect to login
+        break
+      case 'RATE_LIMITED':
+        // Show rate limit message
+        break
+      default:
+        // Generic error handling
+        console.error(error.message)
+    }
+  }
+}
+```
+
+### Best Practices
+
+1. **Always Use Generated Code**: Never write manual API calls
+2. **Validate Early**: Use Zod schemas for form validation
+3. **Handle Errors Gracefully**: Use the provided error handling utilities
+4. **Type Everything**: Leverage the generated TypeScript types
+5. **Regenerate Regularly**: Keep API client in sync with backend changes
+
+### Troubleshooting
+
+**Generated files not found**: Run `npm run api:generate` first
+**Type errors**: Ensure backend OpenAPI spec is up to date
+**Validation failures**: Check that request data matches expected schema
+**Network errors**: Verify `VITE_API_URL` environment variable
 
 ## Important Notes
 
@@ -249,6 +456,7 @@ Always wrap third-party UI components in custom Tankmate components:
 - Production: Variables injected by deployment environment
 - Never commit `.env` to version control
 - Always use `VITE_` prefix for Vite to expose them
+- **IMPORTANT**: Always prefer FAILING when environment variables are missing rather than defaulting to fallback values. This ensures configuration issues are caught early.
 
 ## Troubleshooting
 
