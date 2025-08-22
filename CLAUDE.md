@@ -292,6 +292,117 @@ Always wrap third-party UI components in custom Tankmate components:
 - WebSocket integration for real-time features
 - Internationalization (i18n) support
 
+## Design System & Brand Identity
+
+### Brand Personality
+Tankmate embodies a **trustworthy, calming, modern, and knowledgeable** brand personality that reflects the serene nature of aquarium keeping while providing professional-grade management tools.
+
+**Core Values:**
+- Simplicity in complexity (making aquarium management easy)
+- Community-driven learning
+- Environmental consciousness
+- Quality over quantity
+
+### Color Palette
+**Primary Colors (Aquatic Theme):**
+- **Ocean Blue**: `#0891b2` - Primary brand color for buttons, links, brand elements
+- **Deep Teal**: `#0f766e` - Secondary brand color for navigation, secondary actions
+- **Aqua**: `#06b6d4` - Accent color for hover states, active elements, progress
+
+**Supporting Colors:**
+- **Coral**: `#f97316` - Warning/attention states, destructive actions
+- **Seafoam**: `#10b981` - Success states, confirmation messages
+- **Pearl**: `#f8fafc` - Light backgrounds
+- **Charcoal**: `#1e293b` - Dark text, primary content
+
+**Neutral Palette:**
+- **Slate Scale**: Full grayscale from `#f8fafc` to `#0f172a` for text, borders, backgrounds
+
+### Typography System
+**Primary Font: Inter** - Modern, clean, excellent readability
+- **Headings**: Inter 600-700 weight
+- **Body Text**: Inter 400 weight
+- **Code/Data**: JetBrains Mono for technical information
+
+**Typography Scale:**
+- **H1**: 2.25rem (36px) - Page titles
+- **H2**: 1.875rem (30px) - Section headers  
+- **H3**: 1.5rem (24px) - Subsection headers
+- **H4**: 1.25rem (20px) - Card titles
+- **Body**: 1rem (16px) - Main content
+- **Small**: 0.875rem (14px) - Captions, metadata
+- **XS**: 0.75rem (12px) - Labels, badges
+
+### Spacing & Layout
+**Spacing Scale (4px grid system):**
+- **XS**: 4px - Tight spacing, icon gaps
+- **SM**: 8px - Button padding, small gaps  
+- **MD**: 16px - Standard component spacing
+- **LG**: 24px - Section spacing
+- **XL**: 32px - Large section gaps
+- **2XL**: 48px - Major section separation
+- **3XL**: 64px - Page-level spacing
+
+**Layout Constraints:**
+- **Container Max Width**: 1200px (desktop)
+- **Content Max Width**: 800px (readable content)
+- **Grid System**: 12-column CSS Grid
+
+### Component Design Patterns
+**Cards:**
+- 8px border radius, subtle drop shadow
+- 24px internal padding
+- Hover states with elevated shadow and slight scale
+
+**Buttons:**
+- 6px border radius
+- Primary: Ocean blue background, white text
+- Secondary: Transparent with ocean blue border
+- Ghost: No background, light blue hover
+
+**Inputs:**
+- 6px border radius
+- 1px slate-300 border, ocean blue focus state
+- 12px vertical, 16px horizontal padding
+
+### Animation & Interactions
+**Timing:**
+- **Quick interactions**: 150ms (hover, focus)
+- **Standard transitions**: 250ms (modal open/close)
+- **Complex animations**: 400ms (page transitions)
+- **Easing**: CSS `ease-out` for natural feel
+
+**States:**
+- Hover: Slightly darker colors, elevated shadows
+- Focus: Ocean blue outline, 2px width for accessibility
+- Loading: Spinner animations, skeleton loaders with shimmer
+- Success: Gentle bounce effect (scale 1.0 → 1.05 → 1.0)
+
+### Design Token Usage
+**IMPORTANT**: All design values are centralized in `src/lib/design-tokens.ts` and integrated with Tailwind CSS configuration. Always reference these constants rather than hardcoded values:
+
+```tsx
+import { designTokens } from '@/lib/design-tokens'
+
+// Use design tokens in components
+const buttonClass = `bg-brand-ocean text-white rounded-${designTokens.borderRadius.md}`
+
+// Or access via Tailwind classes that reference the tokens
+<Button className="bg-brand-ocean hover:bg-brand-ocean-dark transition-brand-quick">
+```
+
+**Benefits of Design Tokens:**
+- **Consistency**: Centralized values ensure uniform design
+- **Maintainability**: Change values once, update everywhere
+- **Type Safety**: TypeScript interfaces prevent invalid values
+- **Scalability**: Easy to extend with new tokens or themes
+
+### Visual Hierarchy Guidelines
+- **Primary Actions**: Ocean blue, prominent placement, larger size
+- **Secondary Actions**: Outlined style, positioned right of primary
+- **Content Priority**: High contrast for important content, muted for supporting info
+- **Scanability**: F-pattern layouts, consistent card grids, progressive disclosure
+
 ## Contact & Support
 
 For questions about this codebase or architecture decisions, refer to this documentation first. This guide should be updated whenever significant architectural changes are made.
