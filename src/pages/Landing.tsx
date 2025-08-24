@@ -17,7 +17,7 @@ export function Landing() {
           <div className="max-w-4xl mx-auto text-center">
             <div className="mb-8">
               <span className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-brand-ocean to-brand-aqua text-white text-sm font-medium mb-6 shadow-lg">
-                Trusted by 10,000+ aquarium enthusiasts
+                Built for aquarium enthusiasts
               </span>
             </div>
             <h1 className="text-4xl lg:text-6xl font-bold tracking-tight mb-6 text-brand-charcoal">
@@ -28,13 +28,13 @@ export function Landing() {
               </span>
             </h1>
             <p className="text-xl lg:text-2xl text-brand-charcoal/70 mb-8 max-w-3xl mx-auto leading-relaxed">
-              Transform aquarium care from guesswork to precision. Monitor water quality, track
-              schedules, and keep your underwater ecosystem thriving with confidence.
+              Transform aquarium care from guesswork to precision. Track maintenance schedules, 
+              manage your tanks, and keep your underwater ecosystem thriving with confidence.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
               <Link to="/signup">
                 <TankmateButton size="lg" className="min-w-[180px]">
-                  Start Free Trial
+                  Create Free Account
                 </TankmateButton>
               </Link>
               <Link to="/features">
@@ -44,7 +44,7 @@ export function Landing() {
               </Link>
             </div>
             <p className="text-sm text-muted-foreground">
-              No credit card required • 30-day free trial • Cancel anytime
+              No credit card required • Always free to get started
             </p>
           </div>
         </div>
@@ -80,21 +80,21 @@ export function Landing() {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={2}
-                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
                       />
                     </svg>
                   </div>
                   <TankmateCardTitle className="text-brand-charcoal">
-                    Smart Water Monitoring
+                    Tank Management
                   </TankmateCardTitle>
                   <TankmateCardDescription className="text-brand-charcoal/70">
-                    Real-time tracking of pH, temperature, ammonia, nitrites, and more
+                    Organize and track all your aquariums in one place
                   </TankmateCardDescription>
                 </TankmateCardHeader>
                 <TankmateCardContent>
                   <p className="text-sm text-brand-charcoal/70 leading-relaxed">
-                    Get instant alerts when parameters drift outside safe ranges. Historical trends
-                    help you spot patterns and prevent problems before they start.
+                    Keep detailed records of tank specs, inhabitants, equipment, and history. 
+                    Perfect for hobbyists managing multiple aquariums.
                   </p>
                 </TankmateCardContent>
               </TankmateCard>

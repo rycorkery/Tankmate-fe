@@ -2,7 +2,7 @@ export const config = {
   api: {
     url: import.meta.env.VITE_API_URL || 'http://localhost:3000',
     version: import.meta.env.VITE_API_VERSION || 'v1',
-    fullUrl: `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/${import.meta.env.VITE_API_VERSION || 'v1'}`,
+    fullUrl: import.meta.env.VITE_API_URL || 'http://localhost:3000',
   },
   auth: {
     domain: import.meta.env.VITE_AUTH_DOMAIN || '',

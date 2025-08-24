@@ -24,7 +24,11 @@ export default {
     'hover:text-brand-ocean', 'hover:text-brand-teal', 'hover:text-brand-aqua',
     'from-brand-ocean', 'to-brand-aqua', 'from-brand-seafoam', 'to-brand-ocean',
     'ring-brand-ocean', 'bg-brand-ocean/10', 'bg-brand-ocean/5',
-    'text-brand-charcoal/70', 'border-brand-ocean/20', 'border-brand-ocean/40'
+    'text-brand-charcoal/70', 'border-brand-ocean/20', 'border-brand-ocean/40',
+    // Sidebar animation classes
+    'w-16', 'w-64', 'rotate-0', 'rotate-180', 
+    'ml-0', 'ml-3', 'opacity-0', 'opacity-100',
+    'translate-x-0', '-translate-x-2', 'ml-auto', 'mx-auto'
   ],
   theme: {
     extend: {

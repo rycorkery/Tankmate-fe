@@ -622,3 +622,10 @@ For questions about this codebase or architecture decisions, refer to this docum
 - **Single Theme**: Focus on one polished light theme rather than implementing dark mode functionality.
 - **Professional Appearance**: Maintain a clean, trustworthy, and modern aesthetic that reflects the brand values.
 - **Centralized Color System**: All brand colors are defined once in `tailwind.config.js` under the `brand` namespace. Components should always use `brand-*` classes (e.g., `text-brand-ocean`, `bg-brand-teal`) rather than hardcoded colors. This ensures consistency and makes global color changes possible.
+
+## Code Quality Guidelines
+- **Prefer Enums/Constants Over Magic Strings**: Always use enums or constant objects instead of magic strings throughout the codebase. This improves type safety, maintainability, and provides a single source of truth. All constants should be defined in `src/lib/constants.ts`.
+  - Use `ButtonVariant.DEFAULT` instead of `"default"`
+  - Use `Routes.LOGIN` instead of `"/login"`
+  - Use `HttpStatus.UNAUTHORIZED` instead of `401`
+  - Use `StorageKeys.TOKEN` instead of `"token"`

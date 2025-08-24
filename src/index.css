@@ -107,9 +107,9 @@ body {
   min-height: 100vh;
 }
 
-/* Transitions matching design tokens */
-* {
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+/* Default transitions for interactive elements only */
+a, button, input, textarea, select {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform;
   transition-timing-function: cubic-bezier(0, 0, 0.2, 1); /* transitions.easing.easeOut */
   transition-duration: 150ms; /* transitions.duration.fast */
 }

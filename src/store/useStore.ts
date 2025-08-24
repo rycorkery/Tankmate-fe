@@ -62,6 +62,7 @@ export const useStore = create<AppState>()(
         name: 'tankmate-storage',
         partialize: (state) => ({
           user: state.user,
+          isAuthenticated: state.isAuthenticated,
           theme: state.theme,
           sidebarOpen: state.sidebarOpen,
         }),
