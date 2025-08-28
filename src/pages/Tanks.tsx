@@ -1,14 +1,66 @@
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { useGetUserTanks } from '@/api/generated/tankmate'
+import type { TankResponse } from '@/api/generated/model'
 import { TankmateButton } from '@/components/custom/TankmateButton'
-import { TankmateCard, TankmateCardContent, TankmateCardHeader, TankmateCardTitle } from '@/components/custom/TankmateCard'
-import { ButtonVariant, Routes, generateRoute } from '@/lib/constants'
+import { TankCard } from '@/components/tanks/TankCard'
+import { TankFormModal } from '@/components/tanks/TankFormModal'
+import { TankGridSkeleton } from '@/components/tanks/TankSkeletons'
+import { useModal } from '@/hooks/useModal'
+import { ButtonVariant } from '@/lib/constants'
 
 export function Tanks() {
-  // Mock data - in real app this would come from API
-  const tanks = [
-    { id: '1', name: 'Community Tank', type: 'Freshwater', size: '55 gallons', status: 'healthy' },
-    { id: '2', name: 'Reef Tank', type: 'Saltwater', size: '75 gallons', status: 'needs attention' },
-  ]
+  const [editingTank, setEditingTank] = useState<TankResponse | undefined>()
+  const createModal = useModal()
+  const editModal = useModal()
+
+  const { data: tanksData, isLoading, isFetching, error, refetch } = useGetUserTanks({ 
+    pageable: { 
+      page: 0, 
+      size: 20 
+    } 
+  })
+  const tanks = tanksData?.content || []
+  
+  // Use isFetching or check if data hasn't loaded yet
+  const isLoadingTanks = isLoading || isFetching || (tanksData === undefined && !error)
+
+  const handleCreateSuccess = () => {
+    refetch()
+  }
+
+  const handleEditSuccess = () => {
+    refetch()
+  }
+
+  const handleEdit = (tank: TankResponse) => {
+    setEditingTank(tank)
+    editModal.openModal()
+  }
+
+  const handleCloseEditModal = () => {
+    editModal.closeModal()
+    setEditingTank(undefined)
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex min-h-[60vh] items-center justify-center">
+          <div className="text-center">
+            <p className="text-lg font-semibold text-slate-900">Something went wrong</p>
+            <p className="mt-2 text-sm text-slate-600">{(error as any)?.message || 'Failed to load tanks'}</p>
+            <TankmateButton 
+              variant={ButtonVariant.OUTLINE} 
+              onClick={() => refetch()}
+              className="mt-4"
+            >
+              Try Again
+            </TankmateButton>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -17,14 +69,18 @@ export function Tanks() {
           <h1 className="text-3xl font-bold text-slate-900 mb-2">My Tanks</h1>
           <p className="text-slate-600">Manage and monitor your aquariums</p>
         </div>
-        <Link to={Routes.TANK_CREATE}>
-          <TankmateButton variant={ButtonVariant.DEFAULT}>
-            Add New Tank
-          </TankmateButton>
-        </Link>
+        <TankmateButton 
+          variant={ButtonVariant.DEFAULT} 
+          onClick={createModal.openModal}
+          disabled={isLoadingTanks}
+        >
+          Add New Tank
+        </TankmateButton>
       </div>
 
-      {tanks.length === 0 ? (
+      {isLoadingTanks ? (
+        <TankGridSkeleton count={6} />
+      ) : tanks.length === 0 ? (
         <div className="text-center py-16">
           <div className="text-slate-400 mb-4">
             <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -34,53 +90,32 @@ export function Tanks() {
           </div>
           <h3 className="text-lg font-medium text-slate-900 mb-2">No tanks yet</h3>
           <p className="text-slate-600 mb-6">Get started by adding your first aquarium</p>
-          <Link to={Routes.TANK_CREATE}>
-            <TankmateButton variant={ButtonVariant.DEFAULT}>
-              Add Your First Tank
-            </TankmateButton>
-          </Link>
+          <TankmateButton variant={ButtonVariant.DEFAULT} onClick={createModal.openModal}>
+            Add Your First Tank
+          </TankmateButton>
         </div>
       ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {tanks.map((tank) => (
-            <Link key={tank.id} to={generateRoute.tankDetail(tank.id)}>
-              <TankmateCard hoverable clickable>
-                <TankmateCardHeader>
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <TankmateCardTitle>{tank.name}</TankmateCardTitle>
-                      <p className="text-sm text-slate-600">{tank.type} • {tank.size}</p>
-                    </div>
-                    <div className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      tank.status === 'healthy' 
-                        ? 'bg-green-100 text-green-800' 
-                        : 'bg-yellow-100 text-yellow-800'
-                    }`}>
-                      {tank.status}
-                    </div>
-                  </div>
-                </TankmateCardHeader>
-                <TankmateCardContent>
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-slate-600">Temperature:</span>
-                      <span>78°F</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-slate-600">pH:</span>
-                      <span>7.2</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-slate-600">Last maintained:</span>
-                      <span>2 days ago</span>
-                    </div>
-                  </div>
-                </TankmateCardContent>
-              </TankmateCard>
-            </Link>
+            <TankCard key={tank.id} tank={tank} onEdit={handleEdit} />
           ))}
         </div>
       )}
+
+      {/* Create Tank Modal */}
+      <TankFormModal
+        isOpen={createModal.isOpen}
+        onClose={createModal.closeModal}
+        onSuccess={handleCreateSuccess}
+      />
+
+      {/* Edit Tank Modal */}
+      <TankFormModal
+        isOpen={editModal.isOpen}
+        onClose={handleCloseEditModal}
+        tank={editingTank}
+        onSuccess={handleEditSuccess}
+      />
     </div>
   )
 }

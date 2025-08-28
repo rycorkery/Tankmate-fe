@@ -60,6 +60,9 @@ export const Routes = {
   // Maintenance routes
   MAINTENANCE: '/maintenance',
   MAINTENANCE_HISTORY: '/maintenance/history',
+  
+  // Database routes
+  DATABASE: '/database',
 } as const
 
 export type RoutesType = typeof Routes[keyof typeof Routes]

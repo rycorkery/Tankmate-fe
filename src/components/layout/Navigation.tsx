@@ -2,18 +2,10 @@ import { Link } from 'react-router-dom'
 import { TankmateButton } from '@/components/custom'
 import { useStore } from '@/store/useStore'
 import { ButtonVariant, Routes } from '@/lib/constants'
-import { useNavigate } from 'react-router-dom'
+import { UserDropdown } from './UserDropdown'
 
 export function Navigation() {
-  const { user, isAuthenticated, logout } = useStore()
-  const navigate = useNavigate()
-
-  const handleLogout = () => {
-    logout()
-    localStorage.removeItem('token')
-    localStorage.removeItem('refreshToken')
-    navigate(Routes.LOGIN)
-  }
+  const { isAuthenticated } = useStore()
 
   return (
     <nav className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -42,25 +34,7 @@ export function Navigation() {
           </div>
           <div className="flex items-center space-x-4">
             {isAuthenticated ? (
-              <>
-                <Link to="/dashboard">
-                  <TankmateButton variant={ButtonVariant.GHOST} size="sm">
-                    Dashboard
-                  </TankmateButton>
-                </Link>
-                <div className="flex items-center space-x-3">
-                  <div className="text-sm text-slate-600">
-                    {user?.name || user?.email || 'User'}
-                  </div>
-                  <TankmateButton 
-                    variant={ButtonVariant.OUTLINE} 
-                    size="sm"
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </TankmateButton>
-                </div>
-              </>
+              <UserDropdown />
             ) : (
               <>
                 <Link to="/login">

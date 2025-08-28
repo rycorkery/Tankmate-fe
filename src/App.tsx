@@ -9,6 +9,7 @@ import { Dashboard } from '@/pages/Dashboard'
 import { Tanks } from '@/pages/Tanks'
 import { TankDetail } from '@/pages/TankDetail'
 import { Schedule } from '@/pages/Schedule'
+import { Database } from '@/pages/Database'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 import { AuthProvider } from '@/components/auth/AuthProvider'
 import { Routes } from '@/lib/constants'
@@ -38,6 +39,7 @@ function App() {
               <Route path="tanks/:id" element={<TankDetail />} />
               <Route path="tanks/:id/edit" element={<div className="container mx-auto p-8">Edit Tank (Protected)</div>} />
               <Route path="maintenance" element={<Schedule />} />
+              <Route path="database" element={<Database />} />
               <Route path="profile" element={<div className="container mx-auto p-8">Profile Page (Protected)</div>} />
               <Route path="settings" element={<div className="container mx-auto p-8">Settings Page (Protected)</div>} />
             </Route>

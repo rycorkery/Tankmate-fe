@@ -1,5 +1,6 @@
 import Axios, { type AxiosRequestConfig, AxiosError } from 'axios'
 import { config } from '@/config/env'
+import { StorageKeys } from '@/lib/constants'
 
 export const AXIOS_INSTANCE = Axios.create({
   baseURL: config.api.fullUrl,
@@ -7,16 +8,35 @@ export const AXIOS_INSTANCE = Axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  paramsSerializer: function (params) {
+    // Custom serializer to handle nested objects properly
+    const searchParams = new URLSearchParams();
+    
+    for (const [key, value] of Object.entries(params)) {
+      if (typeof value === 'object' && value !== null) {
+        // For nested objects like pageable, flatten them
+        for (const [nestedKey, nestedValue] of Object.entries(value)) {
+          if (nestedValue !== undefined && nestedValue !== null) {
+            searchParams.append(`${nestedKey}`, String(nestedValue));
+          }
+        }
+      } else if (value !== undefined && value !== null) {
+        searchParams.append(key, String(value));
+      }
+    }
+    
+    return searchParams.toString();
+  }
 })
 
 // Request interceptor for auth token
 AXIOS_INSTANCE.interceptors.request.use(
   (config) => {
-    // Add auth token from store if available
-    // const token = useStore.getState().user?.token;
-    // if (token) {
-    //   config.headers.Authorization = `Bearer ${token}`;
-    // }
+    // Add auth token from localStorage if available
+    const token = localStorage.getItem(StorageKeys.TOKEN)
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
     return config
   },
   (error) => {
@@ -30,8 +50,11 @@ AXIOS_INSTANCE.interceptors.response.use(
   (error: AxiosError) => {
     // Handle common error cases
     if (error.response?.status === 401) {
-      // Handle unauthorized - logout user
-      // useStore.getState().logout();
+      // Handle unauthorized - clear auth tokens and reload page
+      localStorage.removeItem(StorageKeys.TOKEN)
+      localStorage.removeItem(StorageKeys.REFRESH_TOKEN)
+      // Redirect to login will be handled by ProtectedRoute component
+      console.error('Authentication expired')
     }
 
     if (error.response?.status === 403) {
