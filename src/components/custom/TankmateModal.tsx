@@ -95,12 +95,7 @@ export function TankmateModal({
               className="h-auto p-2 text-slate-500 hover:text-slate-700"
               aria-label="Close modal"
             >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"

@@ -1,5 +1,5 @@
-import { Skeleton } from "@/components/ui/LoadingState";
-import { TankmateCard, TankmateCardContent, TankmateCardHeader } from "@/components/custom";
+import { Skeleton } from '@/components/ui/LoadingState'
+import { TankmateCard, TankmateCardContent, TankmateCardHeader } from '@/components/custom'
 
 export function TankCardSkeleton() {
   return (
@@ -33,7 +33,7 @@ export function TankCardSkeleton() {
         </div>
       </TankmateCardContent>
     </TankmateCard>
-  );
+  )
 }
 
 export function TankGridSkeleton({ count = 6 }: { count?: number }) {
@@ -43,7 +43,7 @@ export function TankGridSkeleton({ count = 6 }: { count?: number }) {
         <TankCardSkeleton key={index} />
       ))}
     </div>
-  );
+  )
 }
 
 export function TankListSkeleton({ count = 5 }: { count?: number }) {
@@ -61,5 +61,5 @@ export function TankListSkeleton({ count = 5 }: { count?: number }) {
         </div>
       ))}
     </div>
-  );
+  )
 }

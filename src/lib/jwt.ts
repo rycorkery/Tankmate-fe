@@ -7,7 +7,7 @@ interface JWTPayload {
   email?: string
   name?: string
   userId?: string
-  [key: string]: any
+  [key: string]: unknown
 }
 
 /**
@@ -20,7 +20,7 @@ export function decodeJWT(token: string): JWTPayload | null {
     if (parts.length !== 3) {
       return null
     }
-    
+
     // Decode the payload (second part)
     const payload = parts[1]
     const decoded = atob(payload.replace(/-/g, '+').replace(/_/g, '/'))
@@ -39,11 +39,11 @@ export function isTokenExpired(token: string): boolean {
   if (!payload || !payload.exp) {
     return true // Consider invalid or missing exp as expired
   }
-  
+
   // exp is in seconds, Date.now() is in milliseconds
   const expirationTime = payload.exp * 1000
   const currentTime = Date.now()
-  
+
   // Add a small buffer (5 seconds) to account for clock differences
   return currentTime >= expirationTime - 5000
 }
@@ -51,12 +51,14 @@ export function isTokenExpired(token: string): boolean {
 /**
  * Get user info from JWT token
  */
-export function getUserFromToken(token: string): { id: string; email: string; name: string } | null {
+export function getUserFromToken(
+  token: string
+): { id: string; email: string; name: string } | null {
   const payload = decodeJWT(token)
   if (!payload) {
     return null
   }
-  
+
   return {
     id: payload.userId || payload.sub || '',
     email: payload.email || '',
@@ -72,7 +74,7 @@ export function hasValidAuth(): boolean {
   if (!token) {
     return false
   }
-  
+
   return !isTokenExpired(token)
 }
 

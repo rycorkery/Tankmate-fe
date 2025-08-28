@@ -13,8 +13,18 @@ export interface TankmateDateProps {
 }
 
 const MONTHS = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December'
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
 ]
 
 const DAYS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
@@ -26,7 +36,10 @@ const parseLocalDate = (dateString: string): Date => {
 }
 
 const TankmateDate = forwardRef<HTMLDivElement, TankmateDateProps>(
-  ({ label, error, helperText, value, onChange, disabled = false, placeholder = "Select date" }, ref) => {
+  (
+    { label, error, helperText, value, onChange, disabled = false, placeholder = 'Select date' },
+    ref
+  ) => {
     const [isOpen, setIsOpen] = useState(false)
     const [shouldShake, setShouldShake] = useState(false)
     const [displayDate, setDisplayDate] = useState(() => {
@@ -36,11 +49,11 @@ const TankmateDate = forwardRef<HTMLDivElement, TankmateDateProps>(
       }
       return ''
     })
-    
+
     const [viewDate, setViewDate] = useState(() => {
       return value ? parseLocalDate(value) : new Date()
     })
-    
+
     const dropdownRef = useRef<HTMLDivElement>(null)
     const containerRef = useRef<HTMLDivElement>(null)
 
@@ -93,7 +106,7 @@ const TankmateDate = forwardRef<HTMLDivElement, TankmateDateProps>(
     }
 
     const navigateMonth = (direction: 'prev' | 'next') => {
-      setViewDate(prev => {
+      setViewDate((prev) => {
         const newDate = new Date(prev)
         if (direction === 'prev') {
           newDate.setMonth(prev.getMonth() - 1)
@@ -118,14 +131,16 @@ const TankmateDate = forwardRef<HTMLDivElement, TankmateDateProps>(
 
       // Days of the month
       for (let day = 1; day <= daysInMonth; day++) {
-        const isToday = today.getFullYear() === viewDate.getFullYear() && 
-                       today.getMonth() === viewDate.getMonth() && 
-                       today.getDate() === day
-        
-        const isSelected = selectedDate && 
-                          selectedDate.getFullYear() === viewDate.getFullYear() && 
-                          selectedDate.getMonth() === viewDate.getMonth() && 
-                          selectedDate.getDate() === day
+        const isToday =
+          today.getFullYear() === viewDate.getFullYear() &&
+          today.getMonth() === viewDate.getMonth() &&
+          today.getDate() === day
+
+        const isSelected =
+          selectedDate &&
+          selectedDate.getFullYear() === viewDate.getFullYear() &&
+          selectedDate.getMonth() === viewDate.getMonth() &&
+          selectedDate.getDate() === day
 
         days.push(
           <button
@@ -133,10 +148,12 @@ const TankmateDate = forwardRef<HTMLDivElement, TankmateDateProps>(
             type="button"
             onClick={() => handleDateSelect(day)}
             className={cn(
-              "w-8 h-8 text-sm rounded-md transition-colors",
-              isSelected && "bg-brand-ocean text-white font-medium hover:bg-brand-ocean-dark",
-              isToday && !isSelected && "bg-brand-pearl text-brand-ocean font-medium border border-brand-ocean hover:bg-brand-ocean hover:text-white",
-              !isSelected && !isToday && "text-slate-700 hover:bg-brand-ocean hover:text-white"
+              'w-8 h-8 text-sm rounded-md transition-colors',
+              isSelected && 'bg-brand-ocean text-white font-medium hover:bg-brand-ocean-dark',
+              isToday &&
+                !isSelected &&
+                'bg-brand-pearl text-brand-ocean font-medium border border-brand-ocean hover:bg-brand-ocean hover:text-white',
+              !isSelected && !isToday && 'text-slate-700 hover:bg-brand-ocean hover:text-white'
             )}
           >
             {day}
@@ -150,14 +167,16 @@ const TankmateDate = forwardRef<HTMLDivElement, TankmateDateProps>(
     return (
       <div className="w-full space-y-2" ref={containerRef}>
         {label && (
-          <label className={cn(
-            "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
-            error && "text-red-600"
-          )}>
+          <label
+            className={cn(
+              'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
+              error && 'text-red-600'
+            )}
+          >
             {label}
           </label>
         )}
-        
+
         <div className="relative" ref={ref}>
           <button
             type="button"
@@ -169,7 +188,9 @@ const TankmateDate = forwardRef<HTMLDivElement, TankmateDateProps>(
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
               'disabled:cursor-not-allowed disabled:opacity-50',
               'transition-all duration-200',
-              error ? 'border-red-500 focus-visible:ring-red-500 bg-red-50' : 'border-input focus-visible:ring-ring',
+              error
+                ? 'border-red-500 focus-visible:ring-red-500 bg-red-50'
+                : 'border-input focus-visible:ring-ring',
               displayDate ? 'text-foreground' : 'text-muted-foreground'
             )}
           >
@@ -178,7 +199,7 @@ const TankmateDate = forwardRef<HTMLDivElement, TankmateDateProps>(
           </button>
 
           {isOpen && (
-            <div 
+            <div
               ref={dropdownRef}
               className="absolute top-full left-0 z-50 mt-1 w-80 rounded-md border border-slate-200 bg-white p-4 shadow-lg"
             >
@@ -191,11 +212,11 @@ const TankmateDate = forwardRef<HTMLDivElement, TankmateDateProps>(
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </button>
-                
+
                 <div className="font-medium text-slate-900">
                   {MONTHS[viewDate.getMonth()]} {viewDate.getFullYear()}
                 </div>
-                
+
                 <button
                   type="button"
                   onClick={() => navigateMonth('next')}
@@ -207,7 +228,7 @@ const TankmateDate = forwardRef<HTMLDivElement, TankmateDateProps>(
 
               {/* Days of week header */}
               <div className="grid grid-cols-7 gap-1 mb-2">
-                {DAYS.map(day => (
+                {DAYS.map((day) => (
                   <div key={day} className="text-xs font-medium text-slate-500 text-center p-2">
                     {day}
                   </div>
@@ -215,9 +236,7 @@ const TankmateDate = forwardRef<HTMLDivElement, TankmateDateProps>(
               </div>
 
               {/* Calendar grid */}
-              <div className="grid grid-cols-7 gap-1">
-                {renderCalendar()}
-              </div>
+              <div className="grid grid-cols-7 gap-1">{renderCalendar()}</div>
 
               {/* Quick actions */}
               <div className="flex justify-between items-center mt-4 pt-3 border-t border-slate-200">
@@ -252,10 +271,7 @@ const TankmateDate = forwardRef<HTMLDivElement, TankmateDateProps>(
         </div>
 
         {error && (
-          <p className={cn(
-            "text-sm text-red-600 font-medium",
-            shouldShake && "animate-shake"
-          )}>
+          <p className={cn('text-sm text-red-600 font-medium', shouldShake && 'animate-shake')}>
             {error}
           </p>
         )}

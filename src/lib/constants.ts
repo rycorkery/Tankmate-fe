@@ -15,7 +15,7 @@ export const ButtonVariant = {
   LINK: 'link',
 } as const
 
-export type ButtonVariantType = typeof ButtonVariant[keyof typeof ButtonVariant]
+export type ButtonVariantType = (typeof ButtonVariant)[keyof typeof ButtonVariant]
 
 /**
  * Button size types
@@ -27,7 +27,7 @@ export const ButtonSize = {
   ICON: 'icon',
 } as const
 
-export type ButtonSizeType = typeof ButtonSize[keyof typeof ButtonSize]
+export type ButtonSizeType = (typeof ButtonSize)[keyof typeof ButtonSize]
 
 /**
  * Application routes
@@ -39,33 +39,33 @@ export const Routes = {
   ABOUT: '/about',
   FEATURES: '/features',
   CONTACT: '/contact',
-  
+
   // Auth routes
   LOGIN: '/login',
   SIGNUP: '/signup',
   FORGOT_PASSWORD: '/forgot-password',
   RESET_PASSWORD: '/reset-password',
-  
+
   // Protected routes
   DASHBOARD: '/dashboard',
   PROFILE: '/profile',
   SETTINGS: '/settings',
-  
+
   // Tank management routes
   TANKS: '/tanks',
   TANK_DETAIL: '/tanks/:id',
   TANK_CREATE: '/tanks/new',
   TANK_EDIT: '/tanks/:id/edit',
-  
+
   // Maintenance routes
   MAINTENANCE: '/maintenance',
   MAINTENANCE_HISTORY: '/maintenance/history',
-  
+
   // Database routes
   DATABASE: '/database',
 } as const
 
-export type RoutesType = typeof Routes[keyof typeof Routes]
+export type RoutesType = (typeof Routes)[keyof typeof Routes]
 
 /**
  * Helper function to generate dynamic routes
@@ -85,7 +85,7 @@ export const AlertVariant = {
   WARNING: 'warning',
 } as const
 
-export type AlertVariantType = typeof AlertVariant[keyof typeof AlertVariant]
+export type AlertVariantType = (typeof AlertVariant)[keyof typeof AlertVariant]
 
 /**
  * API Response status codes
@@ -105,7 +105,7 @@ export const HttpStatus = {
   SERVICE_UNAVAILABLE: 503,
 } as const
 
-export type HttpStatusType = typeof HttpStatus[keyof typeof HttpStatus]
+export type HttpStatusType = (typeof HttpStatus)[keyof typeof HttpStatus]
 
 /**
  * Local storage keys
@@ -117,4 +117,4 @@ export const StorageKeys = {
   SIDEBAR_OPEN: 'sidebarOpen',
 } as const
 
-export type StorageKeysType = typeof StorageKeys[keyof typeof StorageKeys]
+export type StorageKeysType = (typeof StorageKeys)[keyof typeof StorageKeys]

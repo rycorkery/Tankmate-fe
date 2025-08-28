@@ -47,7 +47,7 @@ export function ParameterInlineForm({ tankId, onSuccess }: ParameterInlineFormPr
     value: '',
     recordedAt: new Date().toISOString().slice(0, 10), // Current date in YYYY-MM-DD format
   })
-  
+
   const [errors, setErrors] = useState<FormErrors>({})
 
   const recordParameterMutation = useRecordParameter({
@@ -62,7 +62,7 @@ export function ParameterInlineForm({ tankId, onSuccess }: ParameterInlineFormPr
         })
         setErrors({})
       },
-      onError: (error: any) => {
+      onError: (error: unknown) => {
         console.error('Failed to create parameter:', error)
         setErrors({ general: 'Failed to create parameter. Please try again.' })
       },
@@ -118,18 +118,25 @@ export function ParameterInlineForm({ tankId, onSuccess }: ParameterInlineFormPr
 
   const getValuePlaceholder = (type: string): string => {
     switch (type) {
-      case 'TEMP': return 'e.g., 78'
-      case 'PH': return 'e.g., 7.2'
-      case 'SALINITY': return 'e.g., 35'
+      case 'TEMP':
+        return 'e.g., 78'
+      case 'PH':
+        return 'e.g., 7.2'
+      case 'SALINITY':
+        return 'e.g., 35'
       case 'NITRATE':
       case 'NITRITE':
       case 'AMMONIA':
-      case 'PHOSPHATE': return 'e.g., 0.5'
+      case 'PHOSPHATE':
+        return 'e.g., 0.5'
       case 'KH':
-      case 'GH': return 'e.g., 8'
+      case 'GH':
+        return 'e.g., 8'
       case 'DISSOLVED_OXYGEN':
-      case 'DISSOLVED_CO2': return 'e.g., 6.5'
-      default: return 'Enter value'
+      case 'DISSOLVED_CO2':
+        return 'e.g., 6.5'
+      default:
+        return 'Enter value'
     }
   }
 
@@ -141,7 +148,7 @@ export function ParameterInlineForm({ tankId, onSuccess }: ParameterInlineFormPr
           <p className="text-xs text-red-600 font-medium">{errors.general}</p>
         </div>
       )}
-      
+
       <form onSubmit={handleSubmit} className="flex items-end gap-2 justify-center">
         <div className="w-32">
           <TankmateSelect
@@ -189,13 +196,23 @@ export function ParameterInlineForm({ tankId, onSuccess }: ParameterInlineFormPr
             className="sr-only"
             id="parameter-date"
           />
-          <label 
+          <label
             htmlFor="parameter-date"
             className="flex items-center justify-center w-10 h-10 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-md cursor-pointer transition-colors"
             title={`Date: ${new Date(formData.recordedAt).toLocaleDateString()}`}
           >
-            <svg className="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            <svg
+              className="w-4 h-4 text-slate-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
             </svg>
           </label>
         </div>
@@ -209,7 +226,7 @@ export function ParameterInlineForm({ tankId, onSuccess }: ParameterInlineFormPr
           Log
         </TankmateButton>
       </form>
-      
+
       {/* Show field errors below in compact form */}
       {(errors.type || errors.value || errors.recordedAt) && (
         <div className="flex gap-2 text-xs text-red-600">

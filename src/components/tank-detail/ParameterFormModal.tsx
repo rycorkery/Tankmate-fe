@@ -44,13 +44,18 @@ const parameterTypeOptions: TankmateSelectOption[] = [
   { value: CreateParameterRequestType.DISSOLVED_CO2, label: 'Dissolved CO2' },
 ]
 
-export function ParameterFormModal({ isOpen, onClose, tankId, onSuccess }: ParameterFormModalProps) {
+export function ParameterFormModal({
+  isOpen,
+  onClose,
+  tankId,
+  onSuccess,
+}: ParameterFormModalProps) {
   const [formData, setFormData] = useState<FormData>({
     type: '',
     value: '',
     recordedAt: new Date().toISOString().slice(0, 10), // Current date in YYYY-MM-DD format
   })
-  
+
   const [errors, setErrors] = useState<FormErrors>({})
 
   const recordParameterMutation = useRecordParameter({
@@ -59,7 +64,7 @@ export function ParameterFormModal({ isOpen, onClose, tankId, onSuccess }: Param
         onSuccess?.()
         onClose()
       },
-      onError: (error: any) => {
+      onError: (error: unknown) => {
         console.error('Failed to create parameter:', error)
         setErrors({ general: 'Failed to create parameter. Please try again.' })
       },
@@ -127,18 +132,25 @@ export function ParameterFormModal({ isOpen, onClose, tankId, onSuccess }: Param
 
   const getValuePlaceholder = (type: string): string => {
     switch (type) {
-      case 'TEMP': return 'e.g., 78'
-      case 'PH': return 'e.g., 7.2'
-      case 'SALINITY': return 'e.g., 35'
+      case 'TEMP':
+        return 'e.g., 78'
+      case 'PH':
+        return 'e.g., 7.2'
+      case 'SALINITY':
+        return 'e.g., 35'
       case 'NITRATE':
       case 'NITRITE':
       case 'AMMONIA':
-      case 'PHOSPHATE': return 'e.g., 0.5'
+      case 'PHOSPHATE':
+        return 'e.g., 0.5'
       case 'KH':
-      case 'GH': return 'e.g., 8'
+      case 'GH':
+        return 'e.g., 8'
       case 'DISSOLVED_OXYGEN':
-      case 'DISSOLVED_CO2': return 'e.g., 6.5'
-      default: return 'Enter value'
+      case 'DISSOLVED_CO2':
+        return 'e.g., 6.5'
+      default:
+        return 'Enter value'
     }
   }
 
@@ -149,12 +161,7 @@ export function ParameterFormModal({ isOpen, onClose, tankId, onSuccess }: Param
   }
 
   return (
-    <TankmateModal
-      isOpen={isOpen}
-      onClose={handleClose}
-      title="Log Water Parameters"
-      size="md"
-    >
+    <TankmateModal isOpen={isOpen} onClose={handleClose} title="Log Water Parameters" size="md">
       <form onSubmit={handleSubmit} className="space-y-4" noValidate>
         {/* Display general server errors at the top */}
         {errors.general && (
@@ -162,7 +169,7 @@ export function ParameterFormModal({ isOpen, onClose, tankId, onSuccess }: Param
             <p className="text-sm text-red-600 font-medium">{errors.general}</p>
           </div>
         )}
-        
+
         <TankmateSelect
           label="Parameter Type"
           value={formData.type}

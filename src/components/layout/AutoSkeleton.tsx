@@ -1,20 +1,20 @@
-import { useEffect, useRef, useState, cloneElement, Children, isValidElement } from 'react';
-import type { ReactElement } from 'react';
-import { Skeleton } from '@/components/ui/LoadingState';
+import { useEffect, useRef, useState, cloneElement, Children, isValidElement } from 'react'
+import type { ReactElement } from 'react'
+import { Skeleton } from '@/components/ui/LoadingState'
 
 interface AutoSkeletonProps {
-  children: ReactElement;
-  isLoading: boolean;
+  children: ReactElement
+  isLoading: boolean
   /**
    * Number of skeleton items to show for lists/grids
    * @default 6
    */
-  count?: number;
+  count?: number
 }
 
 interface ElementDimensions {
-  width: number;
-  height: number;
+  width: number
+  height: number
 }
 
 /**
@@ -22,57 +22,57 @@ interface ElementDimensions {
  * On first render, it briefly renders the real content hidden to measure it, then shows appropriately sized skeletons.
  */
 export function AutoSkeleton({ children, isLoading, count = 6 }: AutoSkeletonProps) {
-  const [dimensions, setDimensions] = useState<Map<string, ElementDimensions>>(new Map());
-  const [isMeasuring, setIsMeasuring] = useState(true);
-  const measureRef = useRef<HTMLDivElement>(null);
+  const [dimensions, setDimensions] = useState<Map<string, ElementDimensions>>(new Map())
+  const [isMeasuring, setIsMeasuring] = useState(true)
+  const measureRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (!isLoading) {
-      setIsMeasuring(false);
-      return;
+      setIsMeasuring(false)
+      return
     }
 
     // Measure the content on mount or when loading starts
     if (measureRef.current && isMeasuring) {
-      const measurements = new Map<string, ElementDimensions>();
-      
+      const measurements = new Map<string, ElementDimensions>()
+
       // Find all elements with data-skeleton attribute
-      const elements = measureRef.current.querySelectorAll('[data-skeleton]');
+      const elements = measureRef.current.querySelectorAll('[data-skeleton]')
       elements.forEach((el) => {
-        const rect = el.getBoundingClientRect();
-        const skeletonType = el.getAttribute('data-skeleton') || 'default';
+        const rect = el.getBoundingClientRect()
+        const skeletonType = el.getAttribute('data-skeleton') || 'default'
         measurements.set(skeletonType, {
           width: rect.width,
           height: rect.height,
-        });
-      });
+        })
+      })
 
       // Also measure common elements
       const measureElements = (selector: string, key: string) => {
-        const el = measureRef.current?.querySelector(selector);
+        const el = measureRef.current?.querySelector(selector)
         if (el) {
-          const rect = el.getBoundingClientRect();
+          const rect = el.getBoundingClientRect()
           measurements.set(key, {
             width: rect.width,
             height: rect.height,
-          });
+          })
         }
-      };
+      }
 
-      measureElements('.tank-card', 'tank-card');
-      measureElements('h1', 'h1');
-      measureElements('h2', 'h2');
-      measureElements('p', 'p');
-      measureElements('button', 'button');
+      measureElements('.tank-card', 'tank-card')
+      measureElements('h1', 'h1')
+      measureElements('h2', 'h2')
+      measureElements('p', 'p')
+      measureElements('button', 'button')
 
-      setDimensions(measurements);
-      setIsMeasuring(false);
+      setDimensions(measurements)
+      setIsMeasuring(false)
     }
-  }, [isLoading, isMeasuring]);
+  }, [isLoading, isMeasuring])
 
   // If not loading, show the real content
   if (!isLoading) {
-    return children;
+    return children
   }
 
   // During measurement phase, render both (hidden real content + basic skeleton)
@@ -80,9 +80,9 @@ export function AutoSkeleton({ children, isLoading, count = 6 }: AutoSkeletonPro
     return (
       <>
         {/* Hidden measurement container */}
-        <div 
+        <div
           ref={measureRef}
-          style={{ 
+          style={{
             position: 'absolute',
             visibility: 'hidden',
             pointerEvents: 'none',
@@ -103,79 +103,77 @@ export function AutoSkeleton({ children, isLoading, count = 6 }: AutoSkeletonPro
           </div>
         </div>
       </>
-    );
+    )
   }
 
   // Generate skeleton based on measured dimensions
   const createSkeleton = (element: ReactElement): ReactElement => {
-    if (!isValidElement(element)) return element;
+    if (!isValidElement(element)) return element
 
-    const { type, props } = element as any;
+    const { type, props } = element as {
+      type: React.ElementType
+      props: React.ComponentProps<'div'> & { 'data-skeleton'?: string }
+    }
 
     // Check for data-skeleton attribute
     if (props?.['data-skeleton']) {
-      const skeletonType = props['data-skeleton'];
-      const dim = dimensions.get(skeletonType);
-      
+      const skeletonType = props['data-skeleton']
+      const dim = dimensions.get(skeletonType)
+
       if (dim) {
         return (
-          <Skeleton 
+          <Skeleton
             variant="rounded"
             width={dim.width}
             height={dim.height}
             className={props.className}
           />
-        );
+        )
       }
     }
 
     // Check for specific class names
     if (props?.className) {
       if (props.className.includes('tank-card')) {
-        const dim = dimensions.get('tank-card');
+        const dim = dimensions.get('tank-card')
         if (dim) {
           return (
-            <Skeleton 
+            <Skeleton
               variant="rounded"
               width="100%"
               height={dim.height}
               className={props.className}
             />
-          );
+          )
         }
       }
 
       // For grids, generate multiple skeletons
       if (props.className.includes('grid')) {
-        const cardDim = dimensions.get('tank-card');
-        
+        const cardDim = dimensions.get('tank-card')
+
         return (
           <div className={props.className}>
             {Array.from({ length: count }).map((_, i) => (
-              <Skeleton 
-                key={i}
-                variant="rounded"
-                width="100%"
-                height={cardDim?.height || 250}
-              />
+              <Skeleton key={i} variant="rounded" width="100%" height={cardDim?.height || 250} />
             ))}
           </div>
-        );
+        )
       }
     }
 
     // HTML elements
     if (typeof type === 'string') {
-      const dim = dimensions.get(type);
+      const dim = dimensions.get(type)
       if (dim) {
-        switch(type) {
+        switch (type) {
           case 'h1':
           case 'h2':
           case 'h3':
           case 'p':
-            return <Skeleton variant="text" width={dim.width * 0.7} height={dim.height} />;
+            return <Skeleton variant="text" width={dim.width * 0.7} height={dim.height} />
           case 'button':
-            return <Skeleton variant="rounded" width={dim.width} height={dim.height} />;
+            return <Skeleton variant="rounded" width={dim.width} height={dim.height} />
         }
       }
     }
@@ -184,24 +182,24 @@ export function AutoSkeleton({ children, isLoading, count = 6 }: AutoSkeletonPro
     if (props?.children) {
       const skeletonChildren = Children.map(props.children, (child) => {
         if (isValidElement(child)) {
-          return createSkeleton(child);
+          return createSkeleton(child)
         }
         if (typeof child === 'string' && child.trim()) {
-          return <Skeleton variant="text" />;
+          return <Skeleton variant="text" />
         }
-        return child;
-      });
+        return child
+      })
 
       return cloneElement(element, {
         ...props,
         children: skeletonChildren,
-      });
+      } as any)
     }
 
-    return element;
-  };
+    return element
+  }
 
-  return createSkeleton(children);
+  return createSkeleton(children)
 }
 
 /**
@@ -212,6 +210,6 @@ export function withSkeletonData<P extends object>(
   skeletonType: string
 ) {
   return function WithSkeletonData(props: P) {
-    return <Component {...props} data-skeleton={skeletonType} />;
-  };
+    return <Component {...props} data-skeleton={skeletonType} />
+  }
 }

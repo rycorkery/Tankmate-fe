@@ -8,13 +8,14 @@ export interface FormErrors {
 export function useFormErrorHandler<T extends FormErrors>() {
   const [errors, setErrors] = useState<T>({} as T)
 
-  const handleApiError = (error: any) => {
+  const handleApiError = (error: unknown) => {
     const newErrors: FormErrors = {}
-    
+
     // Check if it's an Axios error with a response
-    if (error?.response?.data) {
-      const responseData = error.response.data
-      
+    if (error && typeof error === 'object' && 'response' in error) {
+      const axiosError = error as { response: { data: any } }
+      const responseData = axiosError.response.data
+
       // Handle validation errors from the API
       if (responseData.errors) {
         // Map field-specific errors
@@ -22,36 +23,36 @@ export function useFormErrorHandler<T extends FormErrors>() {
           newErrors[field] = responseData.errors[field]
         })
       }
-      
+
       // Handle general error message
       if (responseData.message) {
         newErrors.general = responseData.message
       }
-      
+
       // Handle field violations (Spring Boot style)
       if (responseData.fieldErrors) {
-        responseData.fieldErrors.forEach((fieldError: any) => {
+        responseData.fieldErrors.forEach((fieldError: { field?: string; message?: string }) => {
           const field = fieldError.field
           if (field) {
             newErrors[field] = fieldError.message
           }
         })
       }
-    } else if (error?.message) {
+    } else if (error && typeof error === 'object' && 'message' in error) {
       // Fallback to generic error message
-      newErrors.general = error.message
+      newErrors.general = (error as Error).message
     } else {
       newErrors.general = 'An unexpected error occurred. Please try again.'
     }
-    
+
     setErrors(newErrors as T)
   }
 
   const clearError = (field: keyof T) => {
     if (errors[field]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [field]: undefined
+        [field]: undefined,
       }))
     }
   }
@@ -65,6 +66,6 @@ export function useFormErrorHandler<T extends FormErrors>() {
     setErrors,
     handleApiError,
     clearError,
-    clearAllErrors
+    clearAllErrors,
   }
 }

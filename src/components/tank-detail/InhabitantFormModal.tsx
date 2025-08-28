@@ -37,14 +37,19 @@ const inhabitantTypeOptions: TankmateSelectOption[] = [
   { value: CreateInhabitantRequestType.OTHER, label: 'Other' },
 ]
 
-export function InhabitantFormModal({ isOpen, onClose, tankId, onSuccess }: InhabitantFormModalProps) {
+export function InhabitantFormModal({
+  isOpen,
+  onClose,
+  tankId,
+  onSuccess,
+}: InhabitantFormModalProps) {
   const [formData, setFormData] = useState<FormData>({
     name: '',
     quantity: '1',
     type: '',
     identifiedInhabitantId: '',
   })
-  
+
   const [errors, setErrors] = useState<FormErrors>({})
 
   const createInhabitantMutation = useCreateInhabitant({
@@ -53,7 +58,7 @@ export function InhabitantFormModal({ isOpen, onClose, tankId, onSuccess }: Inha
         onSuccess?.()
         onClose()
       },
-      onError: (error: any) => {
+      onError: (error: unknown) => {
         console.error('Failed to create inhabitant:', error)
         setErrors({ general: 'Failed to create inhabitant. Please try again.' })
       },
@@ -125,10 +130,14 @@ export function InhabitantFormModal({ isOpen, onClose, tankId, onSuccess }: Inha
 
   const getNamePlaceholder = (type: string): string => {
     switch (type) {
-      case 'ANIMAL': return 'e.g., Neon Tetra, Cherry Shrimp'
-      case 'PLANT': return 'e.g., Java Fern, Amazon Sword'
-      case 'OTHER': return 'e.g., Snail, Coral'
-      default: return 'Enter inhabitant name'
+      case 'ANIMAL':
+        return 'e.g., Neon Tetra, Cherry Shrimp'
+      case 'PLANT':
+        return 'e.g., Java Fern, Amazon Sword'
+      case 'OTHER':
+        return 'e.g., Snail, Coral'
+      default:
+        return 'Enter inhabitant name'
     }
   }
 
@@ -139,12 +148,7 @@ export function InhabitantFormModal({ isOpen, onClose, tankId, onSuccess }: Inha
   }
 
   return (
-    <TankmateModal
-      isOpen={isOpen}
-      onClose={handleClose}
-      title="Add Tank Inhabitant"
-      size="md"
-    >
+    <TankmateModal isOpen={isOpen} onClose={handleClose} title="Add Tank Inhabitant" size="md">
       <form onSubmit={handleSubmit} className="space-y-4" noValidate>
         {/* Display general server errors at the top */}
         {errors.general && (
@@ -152,7 +156,7 @@ export function InhabitantFormModal({ isOpen, onClose, tankId, onSuccess }: Inha
             <p className="text-sm text-red-600 font-medium">{errors.general}</p>
           </div>
         )}
-        
+
         <TankmateSelect
           label="Type"
           value={formData.type}

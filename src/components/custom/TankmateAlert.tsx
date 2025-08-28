@@ -27,10 +27,12 @@ export function TankmateAlert({ variant = 'default', className, children }: Tank
   )
 }
 
-export function TankmateAlertDescription({ className, children }: { className?: string; children: React.ReactNode }) {
-  return (
-    <div className={cn('text-sm', className)}>
-      {children}
-    </div>
-  )
+export function TankmateAlertDescription({
+  className,
+  children,
+}: {
+  className?: string
+  children: React.ReactNode
+}) {
+  return <div className={cn('text-sm', className)}>{children}</div>
 }

@@ -2,7 +2,12 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Pencil } from 'lucide-react'
 import type { TankResponse } from '@/api/generated/model'
-import { TankmateCard, TankmateCardContent, TankmateCardHeader, TankmateCardTitle } from '@/components/custom/TankmateCard'
+import {
+  TankmateCard,
+  TankmateCardContent,
+  TankmateCardHeader,
+  TankmateCardTitle,
+} from '@/components/custom/TankmateCard'
 import { generateRoute } from '@/lib/constants'
 
 export interface TankCardProps {
@@ -46,7 +51,7 @@ export function TankCard({ tank, onEdit }: TankCardProps) {
           <Pencil className="h-4 w-4 text-slate-600 group-hover:text-slate-900" />
         </button>
       )}
-      
+
       <Link to={generateRoute.tankDetail(tank.id!)}>
         <TankmateCard hoverable clickable className="tank-card" data-skeleton="tank-card">
           <TankmateCardHeader>
@@ -64,9 +69,7 @@ export function TankCard({ tank, onEdit }: TankCardProps) {
           </TankmateCardHeader>
           <TankmateCardContent>
             {tank.description && (
-              <p className="text-sm text-slate-600 mb-4 line-clamp-2">
-                {tank.description}
-              </p>
+              <p className="text-sm text-slate-600 mb-4 line-clamp-2">{tank.description}</p>
             )}
             <div className="space-y-2">
               <div className="flex justify-between text-sm">

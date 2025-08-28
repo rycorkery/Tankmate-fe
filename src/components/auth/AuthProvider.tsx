@@ -13,7 +13,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     // Check for existing token on mount
     const token = localStorage.getItem(StorageKeys.TOKEN)
-    
+
     if (token) {
       // Check if token is expired
       if (isTokenExpired(token)) {

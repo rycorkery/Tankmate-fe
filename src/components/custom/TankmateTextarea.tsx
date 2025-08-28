@@ -22,10 +22,12 @@ const TankmateTextarea = forwardRef<HTMLTextAreaElement, TankmateTextareaProps>(
     return (
       <div className="w-full space-y-2">
         {label && (
-          <label className={cn(
-            "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
-            error && "text-red-600"
-          )}>
+          <label
+            className={cn(
+              'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
+              error && 'text-red-600'
+            )}
+          >
             {label}
           </label>
         )}
@@ -38,17 +40,16 @@ const TankmateTextarea = forwardRef<HTMLTextAreaElement, TankmateTextareaProps>(
             'disabled:cursor-not-allowed disabled:opacity-50',
             'transition-all duration-200',
             'resize-none',
-            error ? 'border-red-500 focus-visible:ring-red-500 bg-red-50' : 'border-input focus-visible:ring-ring',
+            error
+              ? 'border-red-500 focus-visible:ring-red-500 bg-red-50'
+              : 'border-input focus-visible:ring-ring',
             className
           )}
           ref={ref}
           {...props}
         />
         {error && (
-          <p className={cn(
-            "text-sm text-red-600 font-medium",
-            shouldShake && "animate-shake"
-          )}>
+          <p className={cn('text-sm text-red-600 font-medium', shouldShake && 'animate-shake')}>
             {error}
           </p>
         )}

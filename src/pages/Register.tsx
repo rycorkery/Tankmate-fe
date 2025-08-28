@@ -4,7 +4,12 @@ import { useRegister } from '@/api/generated/tankmate'
 import type { RegisterRequest } from '@/api/generated/model'
 import { useStore } from '@/store/useStore'
 import { ButtonVariant, Routes, AlertVariant, StorageKeys, HttpStatus } from '@/lib/constants'
-import { TankmateCard, TankmateCardContent, TankmateCardHeader, TankmateCardTitle } from '@/components/custom/TankmateCard'
+import {
+  TankmateCard,
+  TankmateCardContent,
+  TankmateCardHeader,
+  TankmateCardTitle,
+} from '@/components/custom/TankmateCard'
 import { TankmateInput } from '@/components/custom/TankmateInput'
 import { TankmateButton } from '@/components/custom/TankmateButton'
 import { TankmateAlert, TankmateAlertDescription } from '@/components/custom/TankmateAlert'
@@ -34,20 +39,21 @@ export function Register() {
         if (data.refreshToken) {
           localStorage.setItem(StorageKeys.REFRESH_TOKEN, data.refreshToken)
         }
-        
+
         setUser({
           id: data.userId || '',
           email: data.email || formData.email,
           name: data.name || formData.name,
         })
-        
+
         navigate(Routes.DASHBOARD)
       },
-      onError: (error: any) => {
-        if (error.response?.status === HttpStatus.CONFLICT) {
+      onError: (error: unknown) => {
+        const axiosError = error as { response?: { status: number; data?: { message?: string } } }
+        if (axiosError.response?.status === HttpStatus.CONFLICT) {
           setApiError('An account with this email already exists')
-        } else if (error.response?.data?.message) {
-          setApiError(error.response.data.message)
+        } else if (axiosError.response?.data?.message) {
+          setApiError(axiosError.response.data.message)
         } else {
           setApiError('An error occurred during registration. Please try again.')
         }
@@ -57,13 +63,13 @@ export function Register() {
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {}
-    
+
     if (!formData.name) {
       newErrors.name = 'Name is required'
     } else if (formData.name.length > 255) {
       newErrors.name = 'Name must be less than 255 characters'
     }
-    
+
     if (!formData.email) {
       newErrors.email = 'Email is required'
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
@@ -71,7 +77,7 @@ export function Register() {
     } else if (formData.email.length > 255) {
       newErrors.email = 'Email must be less than 255 characters'
     }
-    
+
     if (!formData.password) {
       newErrors.password = 'Password is required'
     } else if (formData.password.length < 8) {
@@ -83,13 +89,13 @@ export function Register() {
     } else if (!/(?=.*\d)/.test(formData.password)) {
       newErrors.password = 'Password must contain at least one number'
     }
-    
+
     if (!formData.confirmPassword) {
       newErrors.confirmPassword = 'Please confirm your password'
     } else if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match'
     }
-    
+
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -97,22 +103,24 @@ export function Register() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setApiError('')
-    
+
     if (validateForm()) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { confirmPassword, ...registerData } = formData
       registerMutation.mutate({ data: registerData })
     }
   }
 
-  const handleChange = (field: keyof typeof formData) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({ ...prev, [field]: e.target.value }))
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: undefined }))
+  const handleChange =
+    (field: keyof typeof formData) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFormData((prev) => ({ ...prev, [field]: e.target.value }))
+      if (errors[field]) {
+        setErrors((prev) => ({ ...prev, [field]: undefined }))
+      }
+      if (apiError) {
+        setApiError('')
+      }
     }
-    if (apiError) {
-      setApiError('')
-    }
-  }
 
   const getPasswordStrength = (): { strength: number; label: string; color: string } => {
     const password = formData.password
@@ -126,7 +134,14 @@ export function Register() {
     if (/[^a-zA-Z0-9]/.test(password)) strength++
 
     const labels = ['', 'Weak', 'Fair', 'Good', 'Strong', 'Very Strong']
-    const colors = ['', 'text-red-500', 'text-orange-500', 'text-yellow-500', 'text-green-500', 'text-green-600']
+    const colors = [
+      '',
+      'text-red-500',
+      'text-orange-500',
+      'text-yellow-500',
+      'text-green-500',
+      'text-green-600',
+    ]
 
     return {
       strength,
@@ -196,11 +211,17 @@ export function Register() {
                     <div className="flex-1 h-1 bg-slate-200 rounded-full overflow-hidden">
                       <div
                         className={`h-full transition-all duration-300 ${
-                          passwordStrength.strength === 1 ? 'bg-red-500' :
-                          passwordStrength.strength === 2 ? 'bg-orange-500' :
-                          passwordStrength.strength === 3 ? 'bg-yellow-500' :
-                          passwordStrength.strength === 4 ? 'bg-green-500' :
-                          passwordStrength.strength === 5 ? 'bg-green-600' : ''
+                          passwordStrength.strength === 1
+                            ? 'bg-red-500'
+                            : passwordStrength.strength === 2
+                              ? 'bg-orange-500'
+                              : passwordStrength.strength === 3
+                                ? 'bg-yellow-500'
+                                : passwordStrength.strength === 4
+                                  ? 'bg-green-500'
+                                  : passwordStrength.strength === 5
+                                    ? 'bg-green-600'
+                                    : ''
                         }`}
                         style={{ width: `${(passwordStrength.strength / 5) * 100}%` }}
                       />

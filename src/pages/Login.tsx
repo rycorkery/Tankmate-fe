@@ -4,7 +4,12 @@ import { useLogin } from '@/api/generated/tankmate'
 import type { LoginRequest } from '@/api/generated/model'
 import { useStore } from '@/store/useStore'
 import { ButtonVariant, Routes, AlertVariant, StorageKeys, HttpStatus } from '@/lib/constants'
-import { TankmateCard, TankmateCardContent, TankmateCardHeader, TankmateCardTitle } from '@/components/custom/TankmateCard'
+import {
+  TankmateCard,
+  TankmateCardContent,
+  TankmateCardHeader,
+  TankmateCardTitle,
+} from '@/components/custom/TankmateCard'
 import { TankmateInput } from '@/components/custom/TankmateInput'
 import { TankmateButton } from '@/components/custom/TankmateButton'
 import { TankmateAlert, TankmateAlertDescription } from '@/components/custom/TankmateAlert'
@@ -28,20 +33,21 @@ export function Login() {
         if (data.refreshToken) {
           localStorage.setItem(StorageKeys.REFRESH_TOKEN, data.refreshToken)
         }
-        
+
         setUser({
           id: data.userId || '',
           email: data.email || formData.email,
           name: data.name || '',
         })
-        
+
         navigate(Routes.DASHBOARD)
       },
-      onError: (error: any) => {
-        if (error.response?.status === HttpStatus.UNAUTHORIZED) {
+      onError: (error: unknown) => {
+        const axiosError = error as { response?: { status: number; data?: { message?: string } } }
+        if (axiosError.response?.status === HttpStatus.UNAUTHORIZED) {
           setApiError('Invalid email or password')
-        } else if (error.response?.data?.message) {
-          setApiError(error.response.data.message)
+        } else if (axiosError.response?.data?.message) {
+          setApiError(axiosError.response.data.message)
         } else {
           setApiError('An error occurred during login. Please try again.')
         }
@@ -51,17 +57,17 @@ export function Login() {
 
   const validateForm = (): boolean => {
     const newErrors: Partial<LoginRequest> = {}
-    
+
     if (!formData.email) {
       newErrors.email = 'Email is required'
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email address'
     }
-    
+
     if (!formData.password) {
       newErrors.password = 'Password is required'
     }
-    
+
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -69,16 +75,16 @@ export function Login() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setApiError('')
-    
+
     if (validateForm()) {
       loginMutation.mutate({ data: formData })
     }
   }
 
   const handleChange = (field: keyof LoginRequest) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({ ...prev, [field]: e.target.value }))
+    setFormData((prev) => ({ ...prev, [field]: e.target.value }))
     if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: undefined }))
+      setErrors((prev) => ({ ...prev, [field]: undefined }))
     }
     if (apiError) {
       setApiError('')
@@ -94,9 +100,9 @@ export function Login() {
         </div>
 
         <TankmateCard>
-        <TankmateCardHeader>
-          <TankmateCardTitle>Login</TankmateCardTitle>
-        </TankmateCardHeader>
+          <TankmateCardHeader>
+            <TankmateCardTitle>Login</TankmateCardTitle>
+          </TankmateCardHeader>
           <TankmateCardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               {apiError && (
@@ -158,8 +164,8 @@ export function Login() {
                 </Link>
               </div>
             </form>
-        </TankmateCardContent>
-      </TankmateCard>
+          </TankmateCardContent>
+        </TankmateCard>
       </div>
     </div>
   )

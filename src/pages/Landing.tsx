@@ -28,7 +28,7 @@ export function Landing() {
               </span>
             </h1>
             <p className="text-xl lg:text-2xl text-brand-charcoal/70 mb-8 max-w-3xl mx-auto leading-relaxed">
-              Transform aquarium care from guesswork to precision. Track maintenance schedules, 
+              Transform aquarium care from guesswork to precision. Track maintenance schedules,
               manage your tanks, and keep your underwater ecosystem thriving with confidence.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
@@ -93,7 +93,7 @@ export function Landing() {
                 </TankmateCardHeader>
                 <TankmateCardContent>
                   <p className="text-sm text-brand-charcoal/70 leading-relaxed">
-                    Keep detailed records of tank specs, inhabitants, equipment, and history. 
+                    Keep detailed records of tank specs, inhabitants, equipment, and history.
                     Perfect for hobbyists managing multiple aquariums.
                   </p>
                 </TankmateCardContent>

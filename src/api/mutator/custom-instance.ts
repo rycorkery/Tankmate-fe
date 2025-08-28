@@ -10,23 +10,23 @@ export const AXIOS_INSTANCE = Axios.create({
   },
   paramsSerializer: function (params) {
     // Custom serializer to handle nested objects properly
-    const searchParams = new URLSearchParams();
-    
+    const searchParams = new URLSearchParams()
+
     for (const [key, value] of Object.entries(params)) {
       if (typeof value === 'object' && value !== null) {
         // For nested objects like pageable, flatten them
         for (const [nestedKey, nestedValue] of Object.entries(value)) {
           if (nestedValue !== undefined && nestedValue !== null) {
-            searchParams.append(`${nestedKey}`, String(nestedValue));
+            searchParams.append(`${nestedKey}`, String(nestedValue))
           }
         }
       } else if (value !== undefined && value !== null) {
-        searchParams.append(key, String(value));
+        searchParams.append(key, String(value))
       }
     }
-    
-    return searchParams.toString();
-  }
+
+    return searchParams.toString()
+  },
 })
 
 // Request interceptor for auth token

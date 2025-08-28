@@ -22,9 +22,9 @@ export function DataFormModal({
   children,
   onSubmit,
   isLoading = false,
-  submitText = "Save",
-  cancelText = "Cancel",
-  generalError
+  submitText = 'Save',
+  cancelText = 'Cancel',
+  generalError,
 }: DataFormModalProps) {
   const handleClose = () => {
     if (!isLoading) {
@@ -33,12 +33,7 @@ export function DataFormModal({
   }
 
   return (
-    <TankmateModal
-      isOpen={isOpen}
-      onClose={handleClose}
-      title={title}
-      size="md"
-    >
+    <TankmateModal isOpen={isOpen} onClose={handleClose} title={title} size="md">
       <form onSubmit={onSubmit} className="space-y-4" noValidate>
         {/* Display general server errors at the top */}
         {generalError && (
@@ -46,7 +41,7 @@ export function DataFormModal({
             <p className="text-sm text-red-600 font-medium">{generalError}</p>
           </div>
         )}
-        
+
         {children}
 
         <TankmateModalFooter>
@@ -58,11 +53,7 @@ export function DataFormModal({
           >
             {cancelText}
           </TankmateButton>
-          <TankmateButton
-            type="submit"
-            variant={ButtonVariant.DEFAULT}
-            disabled={isLoading}
-          >
+          <TankmateButton type="submit" variant={ButtonVariant.DEFAULT} disabled={isLoading}>
             {isLoading ? 'Saving...' : submitText}
           </TankmateButton>
         </TankmateModalFooter>

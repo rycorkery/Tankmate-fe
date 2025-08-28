@@ -46,7 +46,7 @@ export function EventFormModal({ isOpen, onClose, tankId, onSuccess }: EventForm
     details: '',
     occurredAt: new Date().toISOString().slice(0, 10), // Current date in YYYY-MM-DD format
   })
-  
+
   const [errors, setErrors] = useState<FormErrors>({})
 
   const createEventMutation = useCreateEvent({
@@ -55,7 +55,7 @@ export function EventFormModal({ isOpen, onClose, tankId, onSuccess }: EventForm
         onSuccess?.()
         onClose()
       },
-      onError: (error: any) => {
+      onError: (error: unknown) => {
         console.error('Failed to create event:', error)
         setErrors({ general: 'Failed to create event. Please try again.' })
       },
@@ -114,14 +114,22 @@ export function EventFormModal({ isOpen, onClose, tankId, onSuccess }: EventForm
 
   const getDetailsPlaceholder = (type: string): string => {
     switch (type) {
-      case 'FEEDING': return 'e.g., Fed flakes and bloodworms'
-      case 'WATER_CHANGE': return 'e.g., 25% water change'
-      case 'ALGAE_BLOOM': return 'e.g., Green algae bloom noticed on glass'
-      case 'FILTER_CLEANING': return 'e.g., Cleaned canister filter media'
-      case 'LIGHT_ADJUSTMENT': return 'e.g., Reduced light intensity to 70%'
-      case 'TEMPERATURE_ADJUSTMENT': return 'e.g., Increased temperature to 78°F'
-      case 'OTHER': return 'Describe what happened...'
-      default: return 'Add details about this event...'
+      case 'FEEDING':
+        return 'e.g., Fed flakes and bloodworms'
+      case 'WATER_CHANGE':
+        return 'e.g., 25% water change'
+      case 'ALGAE_BLOOM':
+        return 'e.g., Green algae bloom noticed on glass'
+      case 'FILTER_CLEANING':
+        return 'e.g., Cleaned canister filter media'
+      case 'LIGHT_ADJUSTMENT':
+        return 'e.g., Reduced light intensity to 70%'
+      case 'TEMPERATURE_ADJUSTMENT':
+        return 'e.g., Increased temperature to 78°F'
+      case 'OTHER':
+        return 'Describe what happened...'
+      default:
+        return 'Add details about this event...'
     }
   }
 
@@ -132,12 +140,7 @@ export function EventFormModal({ isOpen, onClose, tankId, onSuccess }: EventForm
   }
 
   return (
-    <TankmateModal
-      isOpen={isOpen}
-      onClose={handleClose}
-      title="Log Tank Activity"
-      size="md"
-    >
+    <TankmateModal isOpen={isOpen} onClose={handleClose} title="Log Tank Activity" size="md">
       <form onSubmit={handleSubmit} className="space-y-4" noValidate>
         {/* Display general server errors at the top */}
         {errors.general && (
@@ -145,7 +148,7 @@ export function EventFormModal({ isOpen, onClose, tankId, onSuccess }: EventForm
             <p className="text-sm text-red-600 font-medium">{errors.general}</p>
           </div>
         )}
-        
+
         <TankmateSelect
           label="Activity Type"
           value={formData.type}

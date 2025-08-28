@@ -29,10 +29,12 @@ const TankmateSelect = forwardRef<HTMLSelectElement, TankmateSelectProps>(
     return (
       <div className="w-full space-y-2">
         {label && (
-          <label className={cn(
-            "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
-            error && "text-red-600"
-          )}>
+          <label
+            className={cn(
+              'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
+              error && 'text-red-600'
+            )}
+          >
             {label}
           </label>
         )}
@@ -43,7 +45,9 @@ const TankmateSelect = forwardRef<HTMLSelectElement, TankmateSelectProps>(
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
             'disabled:cursor-not-allowed disabled:opacity-50',
             'transition-all duration-200',
-            error ? 'border-red-500 focus-visible:ring-red-500 bg-red-50' : 'border-input focus-visible:ring-ring',
+            error
+              ? 'border-red-500 focus-visible:ring-red-500 bg-red-50'
+              : 'border-input focus-visible:ring-ring',
             className
           )}
           ref={ref}
@@ -61,10 +65,7 @@ const TankmateSelect = forwardRef<HTMLSelectElement, TankmateSelectProps>(
           ))}
         </select>
         {error && (
-          <p className={cn(
-            "text-sm text-red-600 font-medium",
-            shouldShake && "animate-shake"
-          )}>
+          <p className={cn('text-sm text-red-600 font-medium', shouldShake && 'animate-shake')}>
             {error}
           </p>
         )}

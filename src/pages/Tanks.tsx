@@ -13,14 +13,20 @@ export function Tanks() {
   const createModal = useModal()
   const editModal = useModal()
 
-  const { data: tanksData, isLoading, isFetching, error, refetch } = useGetUserTanks({ 
-    pageable: { 
-      page: 0, 
-      size: 20 
-    } 
+  const {
+    data: tanksData,
+    isLoading,
+    isFetching,
+    error,
+    refetch,
+  } = useGetUserTanks({
+    pageable: {
+      page: 0,
+      size: 20,
+    },
   })
   const tanks = tanksData?.content || []
-  
+
   // Use isFetching or check if data hasn't loaded yet
   const isLoadingTanks = isLoading || isFetching || (tanksData === undefined && !error)
 
@@ -48,9 +54,11 @@ export function Tanks() {
         <div className="flex min-h-[60vh] items-center justify-center">
           <div className="text-center">
             <p className="text-lg font-semibold text-slate-900">Something went wrong</p>
-            <p className="mt-2 text-sm text-slate-600">{(error as any)?.message || 'Failed to load tanks'}</p>
-            <TankmateButton 
-              variant={ButtonVariant.OUTLINE} 
+            <p className="mt-2 text-sm text-slate-600">
+              {(error as Error)?.message || 'Failed to load tanks'}
+            </p>
+            <TankmateButton
+              variant={ButtonVariant.OUTLINE}
               onClick={() => refetch()}
               className="mt-4"
             >
@@ -69,8 +77,8 @@ export function Tanks() {
           <h1 className="text-3xl font-bold text-slate-900 mb-2">My Tanks</h1>
           <p className="text-slate-600">Manage and monitor your aquariums</p>
         </div>
-        <TankmateButton 
-          variant={ButtonVariant.DEFAULT} 
+        <TankmateButton
+          variant={ButtonVariant.DEFAULT}
           onClick={createModal.openModal}
           disabled={isLoadingTanks}
         >
@@ -83,9 +91,18 @@ export function Tanks() {
       ) : tanks.length === 0 ? (
         <div className="text-center py-16">
           <div className="text-slate-400 mb-4">
-            <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} 
-                d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+            <svg
+              className="w-16 h-16 mx-auto"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1}
+                d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+              />
             </svg>
           </div>
           <h3 className="text-lg font-medium text-slate-900 mb-2">No tanks yet</h3>

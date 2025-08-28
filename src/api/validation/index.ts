@@ -20,7 +20,7 @@ export function validateData<T>(schema: ZodSchema<T>, data: unknown): Validation
     if (error instanceof ZodError) {
       return {
         success: false,
-        errors: error.issues.map((err: any) => `${err.path.join('.')}: ${err.message}`),
+        errors: error.issues.map((err) => `${err.path.join('.')}: ${err.message}`),
       }
     }
     return {

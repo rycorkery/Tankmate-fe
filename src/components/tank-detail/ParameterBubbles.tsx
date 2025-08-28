@@ -89,7 +89,7 @@ export function ParameterBubbles({ parameters }: ParameterBubblesProps) {
   // Group parameters by date
   const groupedParameters = parameters.reduce<GroupedParameters>((groups, param) => {
     if (!param.recordedAt) return groups
-    
+
     const date = new Date(param.recordedAt).toISOString().split('T')[0]
     if (!groups[date]) {
       groups[date] = []
@@ -106,7 +106,7 @@ export function ParameterBubbles({ parameters }: ParameterBubblesProps) {
     const now = new Date()
     const diffInMs = now.getTime() - date.getTime()
     const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24))
-    
+
     if (diffInDays === 0) {
       return 'Today'
     } else if (diffInDays === 1) {
@@ -114,45 +114,39 @@ export function ParameterBubbles({ parameters }: ParameterBubblesProps) {
     } else if (diffInDays < 7) {
       return `${diffInDays} days ago`
     } else {
-      const options: Intl.DateTimeFormatOptions = { 
-        weekday: 'short', 
-        month: 'short', 
-        day: 'numeric' 
+      const options: Intl.DateTimeFormatOptions = {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
       }
       return date.toLocaleDateString(undefined, options)
     }
   }
 
   if (sortedDates.length === 0) {
-    return (
-      <div className="text-center py-8 text-slate-600">
-        No parameters recorded yet
-      </div>
-    )
+    return <div className="text-center py-8 text-slate-600">No parameters recorded yet</div>
   }
 
   return (
     <div className="space-y-6">
       {sortedDates.map((date, dateIndex) => {
         const dayParameters = groupedParameters[date]
-        
+
         return (
           <div key={date}>
             {/* Date header */}
             <div className="flex items-center gap-3 mb-3">
-              <h4 className="text-sm font-semibold text-slate-700">
-                {formatDate(date)}
-              </h4>
+              <h4 className="text-sm font-semibold text-slate-700">{formatDate(date)}</h4>
               <div className="flex-1 h-px bg-gradient-to-r from-slate-200 to-transparent"></div>
             </div>
-            
+
             {/* Parameter bubbles */}
             <div className="flex flex-wrap gap-2">
               {dayParameters.map((param) => {
                 const config = param.type ? PARAMETER_CONFIG[param.type] : null
-                
+
                 if (!config) return null
-                
+
                 return (
                   <div
                     key={param.id}
@@ -160,9 +154,7 @@ export function ParameterBubbles({ parameters }: ParameterBubblesProps) {
                     style={{ backgroundColor: config.color }}
                     title={`${config.label}: ${param.value} ${config.unit}`}
                   >
-                    <span className="text-xs opacity-90 mr-1">
-                      {config.shortLabel}
-                    </span>
+                    <span className="text-xs opacity-90 mr-1">{config.shortLabel}</span>
                     <span className="font-semibold">
                       {param.value} {config.unit}
                     </span>
@@ -170,7 +162,7 @@ export function ParameterBubbles({ parameters }: ParameterBubblesProps) {
                 )
               })}
             </div>
-            
+
             {/* Separator line between days (except for the last one) */}
             {dateIndex < sortedDates.length - 1 && (
               <div className="mt-6 border-b border-slate-100"></div>

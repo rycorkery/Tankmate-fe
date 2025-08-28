@@ -1,16 +1,33 @@
 import { TankmateButton } from '@/components/custom/TankmateButton'
-import { TankmateCard, TankmateCardContent, TankmateCardHeader, TankmateCardTitle } from '@/components/custom/TankmateCard'
+import {
+  TankmateCard,
+  TankmateCardContent,
+  TankmateCardHeader,
+  TankmateCardTitle,
+} from '@/components/custom/TankmateCard'
 import { ButtonVariant } from '@/lib/constants'
 
 export function Schedule() {
   // Mock data - in real app this would come from API
   const todayTasks = [
-    { id: '1', task: 'Test water parameters', tank: 'Community Tank', time: '9:00 AM', completed: false },
+    {
+      id: '1',
+      task: 'Test water parameters',
+      tank: 'Community Tank',
+      time: '9:00 AM',
+      completed: false,
+    },
     { id: '2', task: 'Feed fish', tank: 'Reef Tank', time: '6:00 PM', completed: true },
   ]
 
   const upcomingTasks = [
-    { id: '3', task: 'Water change (25%)', tank: 'Community Tank', date: 'Tomorrow', completed: false },
+    {
+      id: '3',
+      task: 'Water change (25%)',
+      tank: 'Community Tank',
+      date: 'Tomorrow',
+      completed: false,
+    },
     { id: '4', task: 'Clean filter', tank: 'Reef Tank', date: 'Friday', completed: false },
     { id: '5', task: 'Algae scraping', tank: 'Community Tank', date: 'Sunday', completed: false },
   ]
@@ -22,9 +39,7 @@ export function Schedule() {
           <h1 className="text-3xl font-bold text-slate-900 mb-2">Schedule</h1>
           <p className="text-slate-600">Stay on top of your tank maintenance</p>
         </div>
-        <TankmateButton variant={ButtonVariant.DEFAULT}>
-          Add Task
-        </TankmateButton>
+        <TankmateButton variant={ButtonVariant.DEFAULT}>Add Task</TankmateButton>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
@@ -41,7 +56,10 @@ export function Schedule() {
             ) : (
               <div className="space-y-4">
                 {todayTasks.map((task) => (
-                  <div key={task.id} className="flex items-center justify-between p-3 border rounded-lg">
+                  <div
+                    key={task.id}
+                    className="flex items-center justify-between p-3 border rounded-lg"
+                  >
                     <div className="flex items-center space-x-3">
                       <input
                         type="checkbox"
@@ -51,7 +69,9 @@ export function Schedule() {
                       />
                       <div className={task.completed ? 'line-through text-slate-400' : ''}>
                         <div className="font-medium">{task.task}</div>
-                        <div className="text-sm text-slate-600">{task.tank} • {task.time}</div>
+                        <div className="text-sm text-slate-600">
+                          {task.tank} • {task.time}
+                        </div>
                       </div>
                     </div>
                     {!task.completed && (
@@ -79,10 +99,15 @@ export function Schedule() {
             ) : (
               <div className="space-y-4">
                 {upcomingTasks.map((task) => (
-                  <div key={task.id} className="flex items-center justify-between p-3 border rounded-lg">
+                  <div
+                    key={task.id}
+                    className="flex items-center justify-between p-3 border rounded-lg"
+                  >
                     <div>
                       <div className="font-medium">{task.task}</div>
-                      <div className="text-sm text-slate-600">{task.tank} • {task.date}</div>
+                      <div className="text-sm text-slate-600">
+                        {task.tank} • {task.date}
+                      </div>
                     </div>
                     <TankmateButton variant={ButtonVariant.GHOST} size="sm">
                       Edit

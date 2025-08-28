@@ -9,7 +9,7 @@ interface ProtectedRouteProps {
 
 export function ProtectedRoute({ children, redirectTo = Routes.LOGIN }: ProtectedRouteProps) {
   const isAuthenticated = useStore((state) => state.isAuthenticated)
-  
+
   // You could also check for a token in localStorage as a fallback
   const token = localStorage.getItem('token')
   const hasAuth = isAuthenticated || !!token
